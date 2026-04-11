@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('dokan_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ["pending", "pending", "delovered"])->default("pending");
+            $table->enum('status', ['pending', 'delivered', 'cancelled'])->default('pending');
             $table->string("payment_status")->default("pending");
             $table->double("total_amount");
             $table->timestamps();
