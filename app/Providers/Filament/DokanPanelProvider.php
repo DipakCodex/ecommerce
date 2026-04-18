@@ -19,25 +19,25 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class DokanPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
-            ->authGuard('admin')
+            ->id('dokan')
+            ->path('dokan')
             ->login()
+            ->profile()
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+            ->authGuard('dokan')
+            ->discoverResources(in: app_path('Filament/Dokan/Resources'), for: 'App\Filament\Dokan\Resources')
+            ->discoverPages(in: app_path('Filament/Dokan/Pages'), for: 'App\Filament\Dokan\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Dokan/Widgets'), for: 'App\Filament\Dokan\Widgets')
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,

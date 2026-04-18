@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('contact_no');
             $table->string('message');
+            $table->string('category');
             $table->enum('status', ["pending", "approved", "rejected"])->default("pending");
             $table->rememberToken();
             $table->timestamps();

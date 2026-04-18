@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Admin;
+use App\Models\Dokan;
 use App\Models\User;
 
 return [
@@ -48,6 +49,11 @@ return [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+
+         'dokan' => [
+            'driver' => 'session',
+            'provider' => 'dokans',
+        ],
     ],
 
     /*
@@ -76,6 +82,11 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => Admin::class,
+        ],
+
+        'dokans' => [
+            'driver' => 'eloquent',
+            'model' => Dokan::class,
         ],
 
 
