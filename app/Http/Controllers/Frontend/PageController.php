@@ -40,4 +40,30 @@ class PageController extends Controller
         toast("Registration SuccessFull", "success");
         return redirect()->route('home');
     }
+
+
+    public function product($slug)
+    {
+        $product = Product::where('slug', $slug)->first();
+        if (!$product) {
+            abort(404);
+        }
+        return view('frontend.product', compact('product'));
+    }
+
+
+     public function products()
+    {
+        $products = Product::orderBy('id', 'desc')->get();
+        return view('frontend.products', compact('products'));
+    }
+
+    public function deals()
+    {
+        $deals = Product::orderBy('id', 'desc')->where('discount','>', 0)->get();
+        return view('frontend.deals', compact('deals'));
+    }
+
+
 }
+

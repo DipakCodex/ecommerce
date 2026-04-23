@@ -95,8 +95,11 @@
                         class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-[var(--border-light)]">
                         <div class="relative">
                             <img src="{{ asset(Storage::url($product->images[0])) }}" alt="{{ $product->name }}">
+                            @if ($product->discount>0)
                             <span
-                                class="absolute top-3 left-3 bg-[var(--danger)] text-white px-3 py-1 rounded-full text-xs font-semibold">-30%</span>
+                                class="absolute top-3 left-3 bg-[var(--danger)] text-white px-3 py-1 rounded-full text-xs font-semibold">{{$product->discount}} %
+                            </span>
+                            @endif
                             <button
                                 class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center hover:bg-[var(--danger)] hover:text-white">
                                 <i class="far fa-heart"></i>
@@ -125,7 +128,7 @@
                                             class="text-sm text-[var(--text-muted)] line-through ml-2">Rs.{{ $product->price }}
                                         </span>
                                 </div>
-                                <a
+                                <a href="{{route('product' , $product->slug)}}"
                                     class="bg-[var(--primary)] mt-5 text-white w-29 h-10 rounded-xl flex items-center justify-center hover:bg-[var(--primary-dark)] shadow-md">
                                     View Product
                                 </a>
