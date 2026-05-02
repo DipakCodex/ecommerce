@@ -1,7 +1,7 @@
 <x-frontend-layout>
     <!-- ===== BREADCRUMB ===== -->
     <section class="py-4 bg-[var(--bg-warm)] border-b border-[var(--border-light)]">
-        <div class="container">
+        <div class="container mx-auto px-4">
             <nav class="flex items-center gap-2 text-sm">
                 <a href="{{ route('home') }}" class="text-[var(--text-muted)] hover:text-[var(--primary)]">
                     <i class="fas fa-home mr-1"></i>Home
@@ -16,7 +16,7 @@
     @if (session('success'))
         <div x-data="{ show: true }" x-show="show" x-transition
             class="bg-[var(--success)]/10 border border-[var(--success)] text-[var(--success)] px-4 py-3 rounded-lg">
-            <div class="container flex items-center justify-between">
+            <div class="container mx-auto px-4 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-check-circle text-xl"></i>
                     <span class="font-medium">{{ session('success') }}</span>
@@ -31,7 +31,7 @@
     @if (session('error'))
         <div x-data="{ show: true }" x-show="show" x-transition
             class="bg-[var(--danger)]/10 border border-[var(--danger)] text-[var(--danger)] px-4 py-3 rounded-lg">
-            <div class="container flex items-center justify-between">
+            <div class="container mx-auto px-4 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-exclamation-circle text-xl"></i>
                     <span class="font-medium">{{ session('error') }}</span>
@@ -45,7 +45,7 @@
 
     <!-- ===== SHOPPING CART ===== -->
     <section class="py-8">
-        <div class="container">
+        <div class="container mx-auto px-4">
             <h1 class="text-3xl md:text-4xl font-bold text-[var(--text-dark)] mb-8">
                 Shopping Cart
                 <span class="text-lg font-normal text-[var(--text-muted)] ml-3">
@@ -73,21 +73,29 @@
                                         </p>
                                     </div>
                                 </div>
-                                <a href="{{ route('checkout.dokan', $group['dokan']->id) }}"
-                                    class="bg-[var(--primary)] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[var(--primary-dark)] transition-all">
-                                    Checkout {{ $group['dokan']->name }}
-                                    <i class="fas fa-arrow-right ml-2"></i>
-                                </a>
+                                <form action="{{ route('checkout.dokan', $group['dokan']->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="total_amt" value="{{ $group['total'] }}">
+                                    <button type="submit" class="bg-[var(--primary)] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[var(--primary-dark)] transition-all">
+                                         Checkout {{ $group['dokan']->name }}
+                                         <i class="fas fa-arrow-right ml-2"></i>
+                                </button>
+                                </form>
                             </div>
                         </div>
 
                         <!-- Cart Items for this Dokan -->
                         <div class="space-y-4">
                             @foreach ($group['items'] as $item)
+                                @php
+                                    // Calculate discounted unit price correctly
+                                    $unitPrice = $item->product->price - $item->product->discount;
+                                    $originalPrice = $item->product->price;
+                                @endphp
                                 <div x-data="{
                                     quantity: {{ $item->qty }},
-                                    unitPrice: {{ $item->product->price - $item->product->discount }},
-                                    originalPrice: {{ $item->product->price }},
+                                    unitPrice: {{ $unitPrice }},
+                                    originalPrice: {{ $originalPrice }},
                                     get itemTotal() {
                                         return this.quantity * this.unitPrice;
                                     },
@@ -208,11 +216,11 @@
                         <!-- Dokan Order Summary -->
                         <div class="bg-white rounded-2xl shadow-md border border-[var(--border-light)] p-6 mt-4">
                             <div class="flex items-center justify-between">
-                                <div>
+                                <div class="w-full">
                                     <h3 class="text-lg font-bold">Order Summary for {{ $group['dokan']->name }}</h3>
                                     <div class="space-y-2 mt-3">
                                         <div class="flex justify-between text-[var(--text-soft)]">
-                                            <span>Subtotal</span>
+                                            <span>Subtotal ({{ count($group['items']) }} items)</span>
                                             <span>Rs. {{ number_format($group['subtotal'], 2) }}</span>
                                         </div>
                                         @if ($group['discount'] > 0)
@@ -270,10 +278,13 @@
     <!-- ===== RECOMMENDED PRODUCTS ===== -->
     @if ($cartCount > 0 && isset($recommendedProducts) && $recommendedProducts->count() > 0)
         <section class="py-12 bg-[var(--bg-warm)]">
-            <div class="container">
+            <div class="container mx-auto px-4">
                 <h2 class="text-2xl font-bold mb-6">You Might Also Like</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach ($recommendedProducts as $product)
+                        @php
+                            $productDiscountedPrice = $product->price - $product->discount;
+                        @endphp
                         <div class="product-card bg-white rounded-2xl shadow-md overflow-hidden border border-[var(--border-light)]">
                             <div class="relative">
                                 @php
@@ -294,14 +305,14 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         @if ($product->discount > 0)
-                                            <span class="text-lg font-bold text-[var(--text-dark)]">
-                                                Rs. {{ number_format($product->price - $product->discount, 2) }}
+                                            <span class="text-lg font-bold text-[var(--primary)]">
+                                                Rs. {{ number_format($productDiscountedPrice, 2) }}
                                             </span>
                                             <span class="text-sm text-[var(--text-muted)] line-through ml-2">
                                                 Rs. {{ number_format($product->price, 2) }}
                                             </span>
                                         @else
-                                            <span class="text-lg font-bold text-[var(--text-dark)]">
+                                            <span class="text-lg font-bold text-[var(--primary)]">
                                                 Rs. {{ number_format($product->price, 2) }}
                                             </span>
                                         @endif
@@ -326,7 +337,7 @@
 
     <!-- ===== TRUST BADGES ===== -->
     <section class="py-10 bg-white border-t border-[var(--border-light)]">
-        <div class="container">
+        <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 bg-[var(--primary)]/10 rounded-full flex items-center justify-center">

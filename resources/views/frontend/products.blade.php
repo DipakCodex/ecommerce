@@ -268,7 +268,7 @@
                         <div class="text-6xl mb-4">🔍</div>
                         <h3 class="text-2xl font-bold mb-2">No Products Found</h3>
                         <p class="text-[var(--text-soft)] mb-6">Try adjusting your filters or search criteria.</p>
-                        <a href="{{ route('products.index') }}" class="inline-block bg-[var(--primary)] text-white px-6 py-3 rounded-full font-semibold hover:bg-[var(--primary-dark)]">
+                        <a href="{{ route('products') }}" class="inline-block bg-[var(--primary)] text-white px-6 py-3 rounded-full font-semibold hover:bg-[var(--primary-dark)]">
                             Clear All Filters
                         </a>
                     </div>

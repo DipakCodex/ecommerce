@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\AuthController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\CartController; // Sirf ek baar import karein
+use App\Http\Controllers\Frontend\OrderController;
 
 // Public Routes
 Route::get("/", [PageController::class, "home"])->name("home");
@@ -33,9 +34,14 @@ Route::middleware("auth")->group(function () {
     Route::delete('/cart/clear', [CartController::class, 'clear_cart'])->name('cart.clear');
 
     // Checkout Routes
-    Route::get('/checkout/{dokanId}', [CartController::class, 'checkoutDokan'])->name('checkout.dokan');
+    Route::POST('/checkout/{dokanId}', [OrderController::class, 'checkoutDokan'])->name('checkout.dokan');
     Route::post('/checkout/direct', [CartController::class, 'direct'])->name('checkout.direct');
 
     Route::get('/product/{id}', [CartController::class, 'show'])->name('product.show');
+
+
+    Route::get('/khalti/callback', [OrderController::class, 'callback'])->name('khalti.callback');
+    Route::get('/order/history', [OrderController::class, 'history'])->name('order.history');
+
 
 });

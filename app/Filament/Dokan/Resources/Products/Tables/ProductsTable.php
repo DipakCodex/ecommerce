@@ -5,6 +5,7 @@ namespace App\Filament\Dokan\Resources\Products\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -13,15 +14,18 @@ class ProductsTable
     public static function configure(Table $table): Table
     {
         return $table
-        ->defaultSort('created_at', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->columns([
+
+               ImageColumn::make('image')
+               ->label('Image'),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('price')
-                ->prefix("Rs.")
+                    ->prefix("Rs.")
                     ->sortable(),
                 TextColumn::make('discount')
-                ->suffix("%")
+                    ->suffix("%")
                     ->numeric()
                     ->sortable(),
                 // TextColumn::make('dokan_id')
